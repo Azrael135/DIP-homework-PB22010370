@@ -28,6 +28,7 @@ To run point guided transformation, run:
 ### 结果：
 Basic Transformation：
 
+![21526cdcd76150e60e4a99e395a127d9](https://github.com/user-attachments/assets/3487d2ef-ac69-466e-a292-1364f79f9313)
 
 Point Guided Deformation:
 
