@@ -15,3 +15,18 @@ You can check my different branches to obtain my homework content.
 conda create -n dip_env python=3.10 -y
 conda activate dip_env
 pip install -r requirements.txt
+```
+### 运行：
+To run basic transformation, run:
+
+`python run_global_transform.py`
+
+To run point guided transformation, run:
+
+`python run_point_transform.py`
+
+### 结果：
+Basic Transformation：
+
+
+Point Guided Deformation:
