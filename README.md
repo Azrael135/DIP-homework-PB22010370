@@ -34,5 +34,10 @@ Point Guided Deformation:
 
 <img width="994" height="1212" alt="image" src="https://github.com/user-attachments/assets/fc3183b4-9656-437b-a6d2-bc4da521f8ff" />
 
+<img width="1288" height="1080" alt="image" src="https://github.com/user-attachments/assets/b0c9df09-0743-4a9d-9f24-f83dcb470315" />
+
+
 备注：为了选取几个固定点，您可以前后两次**连续**点击同一个点，这样我们的向量位移为0，系统自动识别为固定点。
+
+应用：在设计妆容时，可以通过数字捏脸，确定眉型、脸型、眼型，从而塑造风格妆容。以鞠婧祎的图片为例，如果拉高眉尾，收缩颧骨，会从邻家感变成高冷感。
 
