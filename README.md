@@ -30,3 +30,8 @@ Basic Transformation：
 
 
 Point Guided Deformation:
+
+<img width="994" height="1212" alt="image" src="https://github.com/user-attachments/assets/fc3183b4-9656-437b-a6d2-bc4da521f8ff" />
+
+备注：为了选取几个固定点，您可以前后两次**连续**点击同一个点，这样我们的向量位移为0，系统自动识别为固定点。
+
