@@ -70,10 +70,14 @@ cal_laplacian_loss()：计算拉普拉斯损失
 blending()：执行 Poisson 融合优化
 Gradio 界面部分：用于实现前景/背景上传、区域选择、位置调整与结果显示
 ### 4. 实验结果分析
+#### equation
+<img width="1308" height="1048" alt="image" src="https://github.com/user-attachments/assets/55afa70e-e313-420a-b7f9-b74c7d5f02de" />
+
 #### monolisa
 <img width="2748" height="2136" alt="image" src="https://github.com/user-attachments/assets/495ee9ae-8543-43d4-9df3-9a2bbd310169" />
 
 #### water
+
 
 本实验成功实现了一个交互式的 Poisson Image Editing 系统，能够完成以下流程：
 
