@@ -91,7 +91,7 @@ Gradio 界面部分：用于实现前景/背景上传、区域选择、位置调
 <img width="1002" height="730" alt="image" src="https://github.com/user-attachments/assets/75e2bde0-8ddd-4968-b000-eee165b67c00" />
 
 
-本实验成功实现了一个交互式的 Poisson Image Editing 系统，能够完成以下流程：
+综上，本实验成功实现了一个交互式的 Poisson Image Editing 系统，能够完成以下流程：
 
 1. 用户上传前景图像和背景图像
 2. 在前景图像中圈定待融合区域
