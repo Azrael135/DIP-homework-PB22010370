@@ -77,12 +77,17 @@ Gradio 界面部分：用于实现前景/背景上传、区域选择、位置调
 #### monolisa
 <img width="2748" height="2136" alt="image" src="https://github.com/user-attachments/assets/495ee9ae-8543-43d4-9df3-9a2bbd310169" />
 
+#### water
 但我发现，water图片并不能被正确渲染。
 <img width="896" height="714" alt="06cf2a7c88dfd13fd74167cd67f2aaf1" src="https://github.com/user-attachments/assets/40002502-454c-4b8e-9c62-2d8da6a7c314" />
 
 查找原因发现：该边框伪影主要来源于前景区域梯度约束与背景边界条件之间的不匹配。由于当前实现仅在掩膜区域内最小化前景与融合结果的拉普拉斯差异，而未显式约束掩膜边界与目标背景的一致性，同时多边形选区包含了原始前景图中的背景杂色，因此在边界附近产生了明显的亮边、暗边及颜色失真现象。
-所以改成了run_blending_gradio.py:
-#### water
+
+所以改成了run_blending_gradio.py，主要改动为：
+第一，原来的 loss 没有单独约束边界，只是在整个 mask 里硬对齐前景的 Laplacian。
+第二，前景没平移到背景坐标系，比较是错位的。
+第三，初始化先做了 0.9*bg + 0.1*fg，边缘初始化错误。
+结果是：
 <img width="1002" height="730" alt="image" src="https://github.com/user-attachments/assets/75e2bde0-8ddd-4968-b000-eee165b67c00" />
 
 
