@@ -70,13 +70,20 @@ cal_laplacian_loss()：计算拉普拉斯损失
 blending()：执行 Poisson 融合优化
 Gradio 界面部分：用于实现前景/背景上传、区域选择、位置调整与结果显示
 ### 4. 实验结果分析
+我在run_blending_gradio_v1.py中实现了equation和monolisa的正确拼合。
 #### equation
 <img width="1308" height="1048" alt="image" src="https://github.com/user-attachments/assets/55afa70e-e313-420a-b7f9-b74c7d5f02de" />
 
 #### monolisa
 <img width="2748" height="2136" alt="image" src="https://github.com/user-attachments/assets/495ee9ae-8543-43d4-9df3-9a2bbd310169" />
 
+但我发现，water图片并不能被正确渲染。
+<img width="896" height="714" alt="06cf2a7c88dfd13fd74167cd67f2aaf1" src="https://github.com/user-attachments/assets/40002502-454c-4b8e-9c62-2d8da6a7c314" />
+
+查找原因发现：该边框伪影主要来源于前景区域梯度约束与背景边界条件之间的不匹配。由于当前实现仅在掩膜区域内最小化前景与融合结果的拉普拉斯差异，而未显式约束掩膜边界与目标背景的一致性，同时多边形选区包含了原始前景图中的背景杂色，因此在边界附近产生了明显的亮边、暗边及颜色失真现象。
+所以改成了run_blending_gradio.py:
 #### water
+<img width="1002" height="730" alt="image" src="https://github.com/user-attachments/assets/75e2bde0-8ddd-4968-b000-eee165b67c00" />
 
 
 本实验成功实现了一个交互式的 Poisson Image Editing 系统，能够完成以下流程：
