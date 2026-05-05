@@ -1,4 +1,3 @@
-<img width="2040" height="1148" alt="image" src="https://github.com/user-attachments/assets/83dc4e63-82e8-41a0-be5b-13e3be5a654b" /># DIP-homework3-PB22010370
 This is the assignment for the digital image processing course, PB22010370.
 
 # Task1 
