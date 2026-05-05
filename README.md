@@ -527,9 +527,7 @@ trans_xy_penalty = trans[:, :2].pow(2).mean()
 
 最终总损失为：
 
-最终总损失为：
-
-$$
+```math
 \mathcal{L}
 =
 \mathcal{L}_{\mathrm{reproj}}
@@ -543,7 +541,8 @@ $$
 \lambda_{\mathrm{cam}}\mathcal{L}_{\mathrm{cam}}
 +
 \lambda_{\mathrm{trans}}\mathcal{L}_{\mathrm{trans}}
-$$
+
+```
 
 ---
 
