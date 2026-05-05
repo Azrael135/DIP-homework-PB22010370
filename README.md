@@ -453,16 +453,7 @@ F.smooth_l1_loss(residual, torch.zeros_like(residual), beta=beta, reduction="mea
 
 主损失可以写成：
 
-$$
-\mathcal{L}_{reproj}
-=
-\frac{1}{|\Omega|}
-\sum_{(i,j)\in \Omega}
-\rho
-\left(
-\pi(R_iP_j+T_i;f)-p_{ij}^{obs}
-\right)
-$$
+<img width="1060" height="206" alt="image" src="https://github.com/user-attachments/assets/fa960d18-1ac8-45b4-be63-70d2ff8de4cc" />
 
 其中：
 
