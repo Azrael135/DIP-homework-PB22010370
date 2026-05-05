@@ -142,9 +142,9 @@ $$
 
 其中 $$(c_x,c_y)$$ 是图像中心，在代码中设置为：
 
-$$
+```math
 c_x = c_y = \frac{\text{image\_size}}{2}
-$$
+```
 
 本任务中 `image_size` 默认取 1024，因此图像中心默认为：
 
@@ -453,6 +453,7 @@ F.smooth_l1_loss(residual, torch.zeros_like(residual), beta=beta, reduction="mea
 
 主损失可以写成：
 
+```math
 $$
 \mathcal{L}_{reproj}
 =
@@ -463,6 +464,7 @@ $$
 \pi(R_iP_j+T_i;f)-p_{ij}^{obs}
 \right)
 $$
+```
 
 其中：
 
