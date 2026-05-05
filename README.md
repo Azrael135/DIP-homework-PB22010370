@@ -108,49 +108,49 @@ Bundle Adjustment 的核心思想是：同时优化相机参数和三维点坐�
 
 设第 \(j\) 个 3D 点为：
 
-\[
+$$
 P_j = (X_j,Y_j,Z_j)^T
-\]
+$$
 
 第 \(i\) 个相机的旋转和平移分别为：
 
-\[
+$$
 R_i,\quad T_i
-\]
+$$
 
 则该 3D 点在第 \(i\) 个相机坐标系下的位置为：
 
-\[
+$$
 P_{ij}^{cam} = R_i P_j + T_i
-\]
+$$
 
 记：
 
-\[
+$$
 P_{ij}^{cam} = (X_{ij}^{cam},Y_{ij}^{cam},Z_{ij}^{cam})^T
-\]
+$$
 
 再通过相机内参焦距 \(f\) 投影到 2D 图像平面：
 
-\[
+$$
 u_{ij} = -f \frac{X_{ij}^{cam}}{Z_{ij}^{cam}} + c_x
-\]
+$$
 
-\[
+$$
 v_{ij} = f \frac{Y_{ij}^{cam}}{Z_{ij}^{cam}} + c_y
-\]
+$$
 
 其中 \((c_x,c_y)\) 是图像中心，在代码中设置为：
 
-\[
+$$
 c_x = c_y = \frac{\text{image\_size}}{2}
-\]
+$$
 
 本任务中 `image_size` 默认取 1024，因此图像中心默认为：
 
-\[
+$$
 c_x = c_y = 512
-\]
+$$
 
 ---
 
@@ -209,23 +209,23 @@ N = 20000
 
 代码优化每个相机的三个 Euler 角：
 
-\[
+$$
 (\alpha_i,\beta_i,\gamma_i)
-\]
+$$
 
 分别对应绕 \(x,y,z\) 轴的旋转角。
 
 先构造三个基础旋转矩阵：
 
-\[
+$$
 R_x(\alpha),\quad R_y(\beta),\quad R_z(\gamma)
-\]
+$$
 
 然后组合成最终旋转矩阵：
 
-\[
+$$
 R = R_z R_y R_x
-\]
+$$
 
 这样做的好处是：
 
@@ -268,9 +268,9 @@ def project_points(points3d, euler, trans, focal, image_size=1024, eps=1e-6):
 1. 根据 Euler 角得到每个相机的旋转矩阵 \(R_i\)；
 2. 对所有相机和所有 3D 点批量计算相机坐标：
 
-\[
+$$
 X_c = R X + T
-\]
+$$
 
 3. 根据针孔相机模型将 3D 点投影到 2D；
 4. 返回预测的 2D 坐标 `uv` 和相机空间深度 `z`。
@@ -307,55 +307,55 @@ torch.einsum("vij,nj->vni", R, points3d)
 
 在投影公式中：
 
-\[
+$$
 u = -f \frac{X_c}{Z_c} + c_x
-\]
+$$
 
-\[
+$$
 v = f \frac{Y_c}{Z_c} + c_y
-\]
+$$
 
 移项可得：
 
-\[
+$$
 (u-c_x)Z_c + fX_c = 0
-\]
+$$
 
-\[
+$$
 (v-c_y)Z_c - fY_c = 0
-\]
+$$
 
 又因为：
 
-\[
+$$
 X_c = r_1 P + t_x
-\]
+$$
 
-\[
+$$
 Y_c = r_2 P + t_y
-\]
+$$
 
-\[
+$$
 Z_c = r_3 P + t_z
-\]
+$$
 
 其中 \(r_1,r_2,r_3\) 是旋转矩阵 \(R\) 的三行，\(P\) 是待求的 3D 点坐标。
 
 代入后，每个可见视角可以给出两条关于 \(P\) 的线性方程：
 
-\[
+$$
 (u-c_x)(r_3P+t_z) + f(r_1P+t_x)=0
-\]
+$$
 
-\[
+$$
 (v-c_y)(r_3P+t_z) - f(r_2P+t_y)=0
-\]
+$$
 
 整理成线性方程形式：
 
-\[
+$$
 AP=b
-\]
+$$
 
 由于一个点通常可以在多个视角中被观察到，因此可以得到一个超定方程组。代码使用最小二乘求解：
 
@@ -453,7 +453,7 @@ F.smooth_l1_loss(residual, torch.zeros_like(residual), beta=beta, reduction="mea
 
 主损失可以写成：
 
-\[
+$$
 \mathcal{L}_{reproj}
 =
 \frac{1}{|\Omega|}
@@ -462,7 +462,7 @@ F.smooth_l1_loss(residual, torch.zeros_like(residual), beta=beta, reduction="mea
 \left(
 \pi(R_iP_j+T_i;f)-p_{ij}^{obs}
 \right)
-\]
+$$
 
 其中：
 
@@ -527,7 +527,7 @@ trans_xy_penalty = trans[:, :2].pow(2).mean()
 
 最终总损失为：
 
-\[
+$$
 \mathcal{L}
 =
 \mathcal{L}_{reproj}
@@ -541,7 +541,7 @@ trans_xy_penalty = trans[:, :2].pow(2).mean()
 \lambda_{cam}\mathcal{L}_{cam}
 +
 \lambda_{trans}\mathcal{L}_{trans}
-\]
+$$
 
 ---
 
