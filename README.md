@@ -527,20 +527,22 @@ trans_xy_penalty = trans[:, :2].pow(2).mean()
 
 最终总损失为：
 
+最终总损失为：
+
 $$
 \mathcal{L}
 =
-\mathcal{L}_{reproj}
+\mathcal{L}_{\mathrm{reproj}}
 +
-\lambda_{depth}\mathcal{L}_{depth}
+\lambda_{\mathrm{depth}}\mathcal{L}_{\mathrm{depth}}
 +
-\lambda_{center}\mathcal{L}_{center}
+\lambda_{\mathrm{center}}\mathcal{L}_{\mathrm{center}}
 +
-\lambda_{radius}\mathcal{L}_{radius}
+\lambda_{\mathrm{radius}}\mathcal{L}_{\mathrm{radius}}
 +
-\lambda_{cam}\mathcal{L}_{cam}
+\lambda_{\mathrm{cam}}\mathcal{L}_{\mathrm{cam}}
 +
-\lambda_{trans}\mathcal{L}_{trans}
+\lambda_{\mathrm{trans}}\mathcal{L}_{\mathrm{trans}}
 $$
 
 ---
