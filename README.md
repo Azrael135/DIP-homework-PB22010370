@@ -3,9 +3,9 @@ This is the assignment for the digital image processing course, PB22010370.
 # Task1 
 任务目标：给定多视角 2D 观测点，通过 PyTorch 自动求导和梯度下降优化，恢复相机参数与三维点云结构。具体需要优化的变量包括：
 
-- 所有相机共享的内参焦距 \(f\)；
-- 每个相机的外参，包括旋转 \(R\) 和平移 \(T\)，共 50 组相机；
-- 所有三维点坐标 \((X,Y,Z)\)，共 20000 个点。
+- 所有相机共享的内参焦距 $$f$$；
+- 每个相机的外参，包括旋转 $$R$$ 和平移 $$T$$，共 50 组相机；
+- 所有三维点坐标 $$(X,Y,Z)$$，共 20000 个点。
 
 本实现使用 Euler 角对旋转矩阵进行参数化，并使用 Adam 优化器最小化 2D 重投影误差。最终输出优化过程的 loss 曲线、重建后的彩色 3D 点云 OBJ 文件，以及可交互的 Gradio 可视化界面。
 
@@ -86,8 +86,8 @@ data/
 
 其中：
 
-- 第 1 列：2D 横坐标 \(u\)；
-- 第 2 列：2D 纵坐标 \(v\)；
+- 第 1 列：2D 横坐标 $$u$$；
+- 第 2 列：2D 纵坐标 $$v$$；
 - 第 3 列：可见性标记，若为 1 表示该 3D 点在当前视角可见，若为 0 表示不可见。
 
 ### 3.2 `points3d_colors.npy`
@@ -106,19 +106,19 @@ data/
 
 Bundle Adjustment 的核心思想是：同时优化相机参数和三维点坐标，使得三维点经过相机投影后，尽可能接近真实观测到的二维点。
 
-设第 \(j\) 个 3D 点为：
+设第 $$j$$ 个 3D 点为：
 
 $$
 P_j = (X_j,Y_j,Z_j)^T
 $$
 
-第 \(i\) 个相机的旋转和平移分别为：
+第 $$i$$ 个相机的旋转和平移分别为：
 
 $$
 R_i,\quad T_i
 $$
 
-则该 3D 点在第 \(i\) 个相机坐标系下的位置为：
+则该 3D 点在第 $$i$$ 个相机坐标系下的位置为：
 
 $$
 P_{ij}^{cam} = R_i P_j + T_i
@@ -130,7 +130,7 @@ $$
 P_{ij}^{cam} = (X_{ij}^{cam},Y_{ij}^{cam},Z_{ij}^{cam})^T
 $$
 
-再通过相机内参焦距 \(f\) 投影到 2D 图像平面：
+再通过相机内参焦距 $$f$$ 投影到 2D 图像平面：
 
 $$
 u_{ij} = -f \frac{X_{ij}^{cam}}{Z_{ij}^{cam}} + c_x
@@ -140,7 +140,7 @@ $$
 v_{ij} = f \frac{Y_{ij}^{cam}}{Z_{ij}^{cam}} + c_y
 $$
 
-其中 \((c_x,c_y)\) 是图像中心，在代码中设置为：
+其中 $$(c_x,c_y)$$ 是图像中心，在代码中设置为：
 
 $$
 c_x = c_y = \frac{\text{image\_size}}{2}
@@ -187,7 +187,7 @@ obs_uv_cpu, vis_cpu, keys = load_observations(str(data_dir / "points2d.npz"))
 - `vis_cpu` 保存可见性 mask；
 - `keys` 保存每个视角的名称。
 
-如果一共有 \(V\) 个相机视角和 \(N\) 个 3D 点，则：
+如果一共有 $$V$$ 个相机视角和 $$N$$ 个 3D 点，则：
 
 ```text
 obs_uv_cpu.shape = (V, N, 2)
@@ -213,7 +213,7 @@ $$
 (\alpha_i,\beta_i,\gamma_i)
 $$
 
-分别对应绕 \(x,y,z\) 轴的旋转角。
+分别对应绕 $$x,y,z$$ 轴的旋转角。
 
 先构造三个基础旋转矩阵：
 
@@ -265,7 +265,7 @@ def project_points(points3d, euler, trans, focal, image_size=1024, eps=1e-6):
 
 这段代码的含义是：
 
-1. 根据 Euler 角得到每个相机的旋转矩阵 \(R_i\)；
+1. 根据 Euler 角得到每个相机的旋转矩阵 $$R_i$$；
 2. 对所有相机和所有 3D 点批量计算相机坐标：
 
 $$
@@ -339,9 +339,9 @@ $$
 Z_c = r_3 P + t_z
 $$
 
-其中 \(r_1,r_2,r_3\) 是旋转矩阵 \(R\) 的三行，\(P\) 是待求的 3D 点坐标。
+其中 $$r_1,r_2,r_3$$ 是旋转矩阵 $$R$$ 的三行，$$P$$ 是待求的 3D 点坐标。
 
-代入后，每个可见视角可以给出两条关于 \(P\) 的线性方程：
+代入后，每个可见视角可以给出两条关于 $$P$$ 的线性方程：
 
 $$
 (u-c_x)(r_3P+t_z) + f(r_1P+t_x)=0
@@ -453,14 +453,23 @@ F.smooth_l1_loss(residual, torch.zeros_like(residual), beta=beta, reduction="mea
 
 主损失可以写成：
 
-<img width="1060" height="206" alt="image" src="https://github.com/user-attachments/assets/fa960d18-1ac8-45b4-be63-70d2ff8de4cc" />
+$$
+\mathcal{L}_{reproj}
+=
+\frac{1}{|\Omega|}
+\sum_{(i,j)\in \Omega}
+\rho
+\left(
+\pi(R_iP_j+T_i;f)-p_{ij}^{obs}
+\right)
+$$
 
 其中：
 
-- \(\Omega\) 表示所有可见观测；
-- \(\pi(\cdot)\) 表示投影函数；
-- \(p_{ij}^{obs}\) 表示真实 2D 观测；
-- \(\rho\) 表示 Smooth L1 损失。
+- $$\Omega$$ 表示所有可见观测；
+- $$\pi(\cdot)$$ 表示投影函数；
+- $$p_{ij}^{obs}$$ 表示真实 2D 观测；
+- $$\rho$$ 表示 Smooth L1 损失。
 
 ---
 
@@ -481,7 +490,7 @@ F.smooth_l1_loss(residual, torch.zeros_like(residual), beta=beta, reduction="mea
 depth_penalty = F.relu(zc[vis] + args.depth_margin).mean()
 ```
 
-本实验的投影约定下，有效点通常应位于相机前方，对应相机坐标系下的 \(z\) 值需要保持在合理符号范围内。该项用于减少深度方向的异常。
+本实验的投影约定下，有效点通常应位于相机前方，对应相机坐标系下的 $$z$$ 值需要保持在合理符号范围内。该项用于减少深度方向的异常。
 
 #### 5.8.2 点云中心约束
 
@@ -514,7 +523,7 @@ cam_prior = (euler - euler_prior).pow(2).mean() + 0.1 * (trans - trans_prior).po
 trans_xy_penalty = trans[:, :2].pow(2).mean()
 ```
 
-该项限制相机在 \(x,y\) 方向上的平移幅度，进一步减少相机整体漂移。
+该项限制相机在 $$x,y$$ 方向上的平移幅度，进一步减少相机整体漂移。
 
 最终总损失为：
 
@@ -727,8 +736,8 @@ v X Y Z R G B
 
 其中：
 
-- \(X,Y,Z\) 是优化后的 3D 坐标；
-- \(R,G,B\) 是从 `points3d_colors.npy` 读取的颜色。
+- $$X,Y,Z$$ 是优化后的 3D 坐标；
+- $$R,G,B$$ 是从 `points3d_colors.npy` 读取的颜色。
 
 ---
 
@@ -835,7 +844,7 @@ python ba_gradio_viewer.py \
 
 | 作业要求 | 本实现对应内容 |
 |---|---|
-| 实现投影函数 | `project_points()` 根据 \(R,T,f\) 将 3D 点投影到 2D |
+| 实现投影函数 | `project_points()` 根据 $$R,T,f$$ 将 3D 点投影到 2D |
 | 构建优化目标 | 使用可见点上的 2D 重投影误差作为主要优化目标 |
 | 最小化 predicted 2D 与 observed 2D 的距离 | 使用 Smooth L1 loss 计算重投影误差 |
 | 使用 Euler 角参数化旋转 | `euler_xyz_to_matrix()` 将 Euler 角转换为旋转矩阵 |
