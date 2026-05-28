@@ -109,3 +109,4 @@ COLMAP 输出的点云通常较为稀疏，能够描述物体的大致三维结�
 ## 5.1 Gaussian Parameterization
 
 在简化版 3DGS 中，每个 COLMAP 三维点被初始化为一个 3D Gaussian。每个 Gaussian 包含如下可学习参数：
+
