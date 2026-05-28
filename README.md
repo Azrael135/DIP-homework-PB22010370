@@ -10,7 +10,7 @@ This is the assignment for the digital image processing course, PB22010370.
 2. 使用纯 PyTorch 实现简化版 3DGS，包括 Gaussian 初始化、3D 到 2D 投影、Gaussian rasterization 和 alpha-blending；
 3. 使用官方 3DGS 实现运行相同数据集，并从渲染质量、训练速度和显存占用三个方面与简化版实现进行对比。
 
----
+
 
 ## 2. Requirements
 
@@ -19,7 +19,7 @@ This is the assignment for the digital image processing course, PB22010370.
 实验使用的硬件环境如下：
 
 | Item | Description |
-|---|---|
+|||
 | GPU | NVIDIA A100-SXM4-80GB |
 | OS | Ubuntu 22.04 |
 
@@ -111,7 +111,7 @@ COLMAP 输出的点云通常较为稀疏，能够描述物体的大致三维结�
 在简化版 3DGS 中，每个 COLMAP 三维点被初始化为一个 3D Gaussian。每个 Gaussian 包含如下可学习参数：
 
 | Parameter | Meaning |
-|---|---|
+|||
 | Position `μ` | 三维空间中的中心位置 |
 | Color `c` | RGB 颜色 |
 | Opacity `o` | 不透明度 |
@@ -122,31 +122,29 @@ COLMAP 输出的点云通常较为稀疏，能够描述物体的大致三维结�
 
 3D 协方差矩阵由旋转矩阵和尺度矩阵构造：
 
-$$
+```math
 \Sigma = R S S^T R^T
-$$
+```
 
 该公式保证协方差矩阵是半正定的，并且可以通过优化尺度和旋转控制 Gaussian 的形状和方向。
-
----
 
 ### 5.2 Projection from 3D to 2D
 
 对于每个 3D Gaussian，首先根据相机外参将其从世界坐标系变换到相机坐标系，然后利用相机内参投影到图像平面。为了将三维协方差投影为二维协方差，使用投影函数的一阶雅可比矩阵：
 
-$$
+```math
 \Sigma' = J W \Sigma W^T J^T
-$$
+```
 
 其中，`W` 表示世界坐标到相机坐标的旋转变换，`J` 是透视投影的雅可比矩阵，`\Sigma'` 是投影到图像平面后的二维协方差。
 
----
+
 
 ### 5.3 2D Gaussian Rasterization
 
 投影后，每个 Gaussian 在图像平面上形成一个二维 Gaussian。对于像素位置 `x`，二维 Gaussian 的值为：
 
-$$
+```math
 f(x; \mu_i, \Sigma_i)
 =
 \frac{1}{2\pi\sqrt{|\Sigma_i|}}
@@ -154,33 +152,33 @@ f(x; \mu_i, \Sigma_i)
 \left(
 -\frac{1}{2}(x-\mu_i)^T\Sigma_i^{-1}(x-\mu_i)
 \right)
-$$
+```
 
 该值表示当前 Gaussian 对该像素的影响强度。
 
----
+
 
 ### 5.4 Alpha Blending
 
 为了得到最终颜色，需要按照深度顺序对所有 Gaussian 进行 alpha-blending。每个 Gaussian 在像素处的 alpha 定义为：
 
-$$
+```math
 \alpha_i(x) = o_i f(x; \mu_i, \Sigma_i)
-$$
+```
 
 透射率为：
 
-$$
+```math
 T_i(x) = \prod_{j<i} (1-\alpha_j(x))
-$$
+```
 
 最终像素颜色为：
 
-$$
+```math
 C(x) = \sum_i T_i(x)\alpha_i(x)c_i
-$$
+```
 
----
+
 
 ### 5.5 Training
 
@@ -215,7 +213,7 @@ nvidia-smi --query-gpu=timestamp,name,memory.used,utilization.gpu \
   > data/chair/checkpoints/simple_nvidia_smi.csv
 ```
 
----
+
 
 ### 5.6 Results
 
@@ -235,7 +233,7 @@ data/chair/checkpoints/
 
 ![Simplified 3DGS debug result](data/chair/checkpoints/debug_images/epoch_0195.png)
 
----
+
 
 ### 5.7 Discussion
 
@@ -246,7 +244,7 @@ data/chair/checkpoints/
 3. 使用纯 PyTorch 在整张图像上显式计算 `(N, H, W)` 级别的 Gaussian 值，计算和显存开销较大；
 4. 没有使用 tile-based rasterization，因此大量计算发生在 Gaussian 实际影响区域之外。
 
----
+
 
 ## 6. Task 3: Comparison with Official 3DGS
 
@@ -280,7 +278,7 @@ nvidia-smi --query-gpu=timestamp,name,memory.used,utilization.gpu \
   > /path/to/assignment4_3dgs/official_outputs/chair_nvidia_smi.csv
 ```
 
----
+
 
 ### 6.2 Official Rendering
 
@@ -291,7 +289,7 @@ python render.py \
   -m /path/to/assignment4_3dgs/official_outputs/chair
 ```
 
----
+
 
 ### 6.3 Official Metrics
 
@@ -302,12 +300,12 @@ python metrics.py \
   -m /path/to/assignment4_3dgs/official_outputs/chair
 ```
 
----
+
 
 ### 6.4 Quantitative Comparison
 
 | Method | Training Setting | PSNR ↑ | SSIM ↑ | LPIPS ↓ | Training Time | Peak GPU Memory |
-|---|---:|---:|---:|---:|---:|---:|
+||:|:|:|:|:|:|
 | Simplified PyTorch 3DGS | 200 epochs | - | - | - | xxx min | xxx MB |
 | Official 3DGS | 30000 iterations | xxx | xxx | xxx | xxx min | xxx MB |
 
@@ -318,7 +316,7 @@ python metrics.py \
 - 官方 3DGS 的 PSNR / SSIM / LPIPS 来自 `metrics.py`；
 - 简化版如果没有实现单独测试集指标，可以主要使用可视化结果和训练 loss 进行定性比较。
 
----
+
 
 ### 6.5 Qualitative Comparison
 
@@ -332,7 +330,7 @@ python metrics.py \
 
 从可视化结果可以观察到，官方 3DGS 的渲染质量明显更高。物体边界更加清晰，纹理细节更加稳定，多视角一致性也更好。相比之下，简化版 PyTorch 实现能够恢复物体的大致形状，但图像整体较模糊，并且局部区域可能出现空洞或颜色不稳定。
 
----
+
 
 ## 7. Analysis
 
@@ -342,7 +340,7 @@ python metrics.py \
 
 简化版实现只使用 COLMAP 的稀疏点作为初始 Gaussian，Gaussian 数量固定。因此，当初始点云较稀疏时，模型难以覆盖整个物体表面，导致渲染结果出现模糊或空洞。
 
----
+
 
 ### 7.2 Training Speed
 
@@ -350,7 +348,7 @@ python metrics.py \
 
 简化版 PyTorch 实现中，每个 Gaussian 都需要在整张图像网格上计算二维 Gaussian 值，形成形如 `(N, H, W)` 的中间张量。当 Gaussian 数量或图像分辨率增大时，计算量会迅速上升。
 
----
+
 
 ### 7.3 GPU Memory Usage
 
@@ -358,12 +356,12 @@ python metrics.py \
 
 官方实现通过 CUDA kernel 和 tile-based rasterization 避免了完整存储所有 Gaussian 对所有像素的影响，因此显存利用更加高效。同时，官方实现还包含 visibility-aware rendering，只处理对当前视角有贡献的 Gaussian。
 
----
+
 
 ### 7.4 Implementation Difference
 
 | Component | Simplified PyTorch 3DGS | Official 3DGS |
-|---|---|---|
+||||
 | Gaussian Initialization | COLMAP sparse points | COLMAP sparse points |
 | Gaussian Number | Fixed | Adaptive densification |
 | Rasterization | Pure PyTorch dense computation | CUDA tile-based rasterizer |
@@ -371,7 +369,7 @@ python metrics.py \
 | Rendering Efficiency | Low | High |
 | Quality | Coarse reconstruction | High-quality novel view synthesis |
 
----
+
 
 ## 8. Reproducibility
 
@@ -437,7 +435,7 @@ python metrics.py \
   -m /path/to/assignment4_3dgs/official_outputs/chair
 ```
 
----
+
 
 ## 9. Conclusion
 
@@ -445,7 +443,7 @@ python metrics.py \
 
 实验结果表明，简化版实现有助于理解 3DGS 的核心数学原理和渲染流程，但由于缺少 adaptive densification、CUDA rasterizer 和 tile-based rendering，其渲染质量和运行效率均明显弱于官方实现。官方 3DGS 更适合实际高质量新视角合成任务，而简化版实现更适合作为理解 3DGS 基础机制的教学版本。
 
----
+
 
 ## 10. References
 
