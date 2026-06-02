@@ -231,7 +231,7 @@ data/chair/checkpoints/
 
 训练过程中保存的 debug 图像可以用于观察重建质量变化。下图展示了训练过程中的 GT 图像与 rendered 图像对比：
 
-![Simplified 3DGS debug result](data/chair/checkpoints/debug_images/epoch_0195.png)
+
 
 
 
@@ -322,11 +322,12 @@ python metrics.py \
 
 简化版 3DGS 结果：
 
-![Simplified 3DGS result](data/chair/checkpoints/debug_images/epoch_0195.png)
+
 
 官方 3DGS 结果：
 
-![Official 3DGS result](official_outputs/chair/test/ours_30000/renders/example.png)
+<img width="800" height="800" alt="00010" src="https://github.com/user-attachments/assets/b3f7bfc5-2b3f-4ce8-8274-9be897edd9a3" />
+
 
 从可视化结果可以观察到，官方 3DGS 的渲染质量明显更高。物体边界更加清晰，纹理细节更加稳定，多视角一致性也更好。相比之下，简化版 PyTorch 实现能够恢复物体的大致形状，但图像整体较模糊，并且局部区域可能出现空洞或颜色不稳定。
 
