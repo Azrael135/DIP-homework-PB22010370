@@ -230,11 +230,12 @@ data/chair/checkpoints/
 ```
 
 训练过程中保存的 debug 图像可以用于观察重建质量变化。下图展示了训练过程中的 GT 图像与 rendered 图像对比：
-<img width="800" height="800" alt="00012" src="https://github.com/user-attachments/assets/bb6adb01-ad7c-42c1-a936-e33fb9581a3b" />
-<img width="800" height="800" alt="00010" src="https://github.com/user-attachments/assets/18e05c61-45df-4edb-8752-884216eac27e" />
-<img width="800" height="800" alt="00008" src="https://github.com/user-attachments/assets/4ba9321d-f41d-470f-8f7e-3d9d32702395" />
-<img width="800" height="800" alt="00005" src="https://github.com/user-attachments/assets/da4cc528-6fdc-4b0d-86dd-b54d490fa091" />
-<img width="800" height="800" alt="00002" src="https://github.com/user-attachments/assets/103a3e52-f177-4600-8a90-5ac5a7123b7d" />
+<img width="400" height="200" alt="epoch_0198" src="https://github.com/user-attachments/assets/ef7d69c4-2f18-4ab8-9ef3-2b1bb8ada860" />
+<img width="400" height="200" alt="epoch_0197" src="https://github.com/user-attachments/assets/cd1971c5-7ee3-46a4-a8d9-239692973d95" />
+<img width="400" height="200" alt="epoch_0196" src="https://github.com/user-attachments/assets/1aee803b-9438-4e4b-9875-492ef11e9a09" />
+<img width="400" height="200" alt="epoch_0195" src="https://github.com/user-attachments/assets/960b5a9d-dde7-4bbe-99ac-d825b932561c" />
+<img width="400" height="200" alt="epoch_0199" src="https://github.com/user-attachments/assets/81bed028-1a5b-48cc-88f4-2679a321399f" />
+
 
 
 ### 5.7 Discussion
