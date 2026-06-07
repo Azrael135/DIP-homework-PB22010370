@@ -230,9 +230,11 @@ data/chair/checkpoints/
 ```
 
 训练过程中保存的 debug 图像可以用于观察重建质量变化。下图展示了训练过程中的 GT 图像与 rendered 图像对比：
-
-
-
+<img width="800" height="800" alt="00012" src="https://github.com/user-attachments/assets/bb6adb01-ad7c-42c1-a936-e33fb9581a3b" />
+<img width="800" height="800" alt="00010" src="https://github.com/user-attachments/assets/18e05c61-45df-4edb-8752-884216eac27e" />
+<img width="800" height="800" alt="00008" src="https://github.com/user-attachments/assets/4ba9321d-f41d-470f-8f7e-3d9d32702395" />
+<img width="800" height="800" alt="00005" src="https://github.com/user-attachments/assets/da4cc528-6fdc-4b0d-86dd-b54d490fa091" />
+<img width="800" height="800" alt="00002" src="https://github.com/user-attachments/assets/103a3e52-f177-4600-8a90-5ac5a7123b7d" />
 
 
 ### 5.7 Discussion
@@ -326,7 +328,12 @@ python metrics.py \
 
 官方 3DGS 结果：
 
-<img width="800" height="800" alt="00010" src="https://github.com/user-attachments/assets/b3f7bfc5-2b3f-4ce8-8274-9be897edd9a3" />
+<img width="800" height="800" alt="00008" src="https://github.com/user-attachments/assets/69af9b35-5328-485f-ad51-3da9a78699ee" />
+<img width="800" height="800" alt="00007" src="https://github.com/user-attachments/assets/35e0e1d8-4d74-4e66-a5e3-41163948cb87" />
+<img width="800" height="800" alt="00012" src="https://github.com/user-attachments/assets/ef2e292d-8b95-4011-967d-d42bd3124c0b" />
+<img width="800" height="800" alt="00001" src="https://github.com/user-attachments/assets/faaf6168-bb04-48e9-ae50-f5334b5d0b39" />
+
+
 
 
 从可视化结果可以观察到，官方 3DGS 的渲染质量明显更高。物体边界更加清晰，纹理细节更加稳定，多视角一致性也更好。相比之下，简化版 PyTorch 实现能够恢复物体的大致形状，但图像整体较模糊，并且局部区域可能出现空洞或颜色不稳定。
