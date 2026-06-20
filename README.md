@@ -169,8 +169,7 @@ f(x; \mu_i, \Sigma_i)
 透射率为：
 
 ```math
-T_i(x) = \prod_{j<i} (1-\alpha_j(x))
-
+T_i(x) = \prod_{j < i} \left(1 - \alpha_j(x)\right)
 ```
 
 最终像素颜色为：
