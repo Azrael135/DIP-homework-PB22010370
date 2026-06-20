@@ -367,16 +367,26 @@ python metrics.py \
 
 
 
-### 7.4 Implementation Difference
+### 7.4 Implementation Differences
 
-| Component | Simplified PyTorch 3DGS | Official 3DGS |
-||||
-| Gaussian Initialization | COLMAP sparse points | COLMAP sparse points |
-| Gaussian Number | Fixed | Adaptive densification |
-| Rasterization | Pure PyTorch dense computation | CUDA tile-based rasterizer |
-| Optimization | Basic RGB/L1 loss | More complete 3DGS optimization |
-| Rendering Efficiency | Low | High |
-| Quality | Coarse reconstruction | High-quality novel view synthesis |
+除渲染质量、训练时间和显存占用外，简化版实现与官方 3DGS 在系统设计上也存在明显差异，如表所示。
+
+| Component               | Simplified PyTorch 3DGS                                      | Official 3DGS                                                 |
+| ----------------------- | ------------------------------------------------------------ | ------------------------------------------------------------- |
+| Gaussian Initialization | 使用 COLMAP 稀疏点云初始化 Gaussian 的位置和颜色                            | 使用 COLMAP 稀疏点云初始化                                             |
+| Gaussian Number         | 固定，不随训练过程动态变化                                                | 训练中通过 densification 和 pruning 动态增删 Gaussian                   |
+| Learnable Parameters    | 优化位置、颜色、不透明度、尺度和旋转等基础参数                                      | 优化完整 Gaussian 参数，并采用更成熟的训练策略                                  |
+| Rasterization           | 纯 PyTorch 实现，在整张图像网格上显式计算 Gaussian 对像素的影响                    | 基于 CUDA 的 tile-based rasterizer，只计算 Gaussian 实际影响的局部区域        |
+| Visibility Handling     | 主要通过深度排序和 alpha-blending 完成遮挡处理                              | 结合高效的可见性筛选和贡献计算，减少无效渲染开销                                      |
+| Gaussian Densification  | 未实现，Gaussian 数量始终固定                                          | 根据训练过程中的梯度和重建误差动态增加或删除 Gaussian                               |
+| Optimization Objective  | 基础 RGB 重建损失，对 Gaussian 参数进行梯度优化                              | 使用更完整的图像重建优化流程，并配合 densification、pruning 和学习率调度               |
+| Computational Cost      | 需要构造近似为 (N \times H \times W) 的中间张量，Gaussian 数量或图像分辨率增大时开销较大 | 使用 CUDA kernel 和 tile-based rendering，避免计算大量无贡献的 Gaussian-像素对 |
+| GPU Memory Usage        | 中间张量较大，显存占用随 (N)、(H)、(W) 快速增长                                | 仅保留局部 tile 内必要的计算结果，显存利用效率更高                                  |
+| Rendering Quality       | 能够恢复物体的大致轮廓和颜色，但边界、纹理和局部细节较模糊                                | 能够生成边界更清晰、纹理更稳定、跨视角一致性更好的渲染结果                                 |
+| Suitable Use            | 用于理解 3DGS 的投影、Gaussian rasterization 和 alpha-blending 基本原理   | 用于高质量、高效率的新视角合成和实际场景重建任务                                      |
+
+从表中可以看出，简化版实现保留了 3DGS 的核心思想，即使用可学习的三维 Gaussian 表示场景，并通过投影和 alpha-blending 进行可微渲染；但它省略了官方实现中对效率和质量至关重要的动态增密、裁剪以及 CUDA tile-based rasterization 等模块。因此，简化版更适合作为教学和原理验证工具，而官方实现更适合高质量的新视角合成任务。
+
 
 
 
