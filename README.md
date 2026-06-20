@@ -170,6 +170,7 @@ f(x; \mu_i, \Sigma_i)
 
 ```math
 T_i(x) = \prod_{j<i} (1-\alpha_j(x))
+
 ```
 
 最终像素颜色为：
